@@ -1,12 +1,11 @@
-# app.py
 import streamlit as st
-from utils.auth import authenticate, require_login
+from utils.auth import authenticate
 
 # ---------- Inicializa session_state ----------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-# ---------- LOGIN ----------
+# ---------- FUNÇÃO DE LOGIN ----------
 def login_page():
     st.title("Login RSLog")
     with st.form("login_form"):
@@ -17,16 +16,13 @@ def login_page():
             if authenticate(username, password):
                 st.session_state.logged_in = True
                 st.success("Login realizado com sucesso!")
-                # Não usamos experimental_rerun aqui
             else:
                 st.error("Usuário ou senha incorretos.")
     st.stop()  # bloqueia o resto do app até logar
 
+# ---------- SE NÃO ESTIVER LOGADO, MOSTRA LOGIN ----------
 if not st.session_state.logged_in:
     login_page()
-
-# ---------- REQUER LOGIN ----------
-require_login()
 
 # ---------- PÁGINA PRINCIPAL: Arquivos ----------
 st.title("Arquivos do projeto")
@@ -62,4 +58,5 @@ else:
 # ---------- LOGOUT ----------
 if st.button("Sair"):
     st.session_state.clear()
+    # Depois de limpar, rerun para voltar pro login
     st.experimental_rerun()
