@@ -33,7 +33,13 @@ async def login(request: Request, usuario: str = Form(...), senha: str = Form(..
         token = criar_sessao()
         sessions[token] = usuario
         response = RedirectResponse("/files", status_code=303)
-        response.set_cookie("session_token", token, httponly=True)
+        response.set_cookie(
+            "session_token",
+            token,
+            httponly=True,
+            samesite="lax",
+            secure=True
+        )
         return response
     return templates.TemplateResponse(request, "login.html", {"erro": "Usuário ou senha inválidos"})
 
