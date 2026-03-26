@@ -1,16 +1,18 @@
-# utils/auth.py
-import streamlit as st
+# posto/utils/auth.py
 import hashlib
-
-def check_password(password: str, salt: str, password_hash: str) -> bool:
-    return hashlib.sha256((password + salt).encode()).hexdigest() == password_hash
+import streamlit as st
 
 def authenticate(username: str, password: str) -> bool:
-    auth = st.secrets["auth"]
-    return username == auth["username"] and check_password(password, auth["salt"], auth["password_hash"])
+    """Verifica usuário e senha usando st.secrets com salt + hash"""
+    salt = st.secrets["auth"]["salt"]
+    password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
+    return (
+        username == st.secrets["auth"]["username"]
+        and password_hash == st.secrets["auth"]["password_hash"]
+    )
 
 def require_login():
-    """Interrompe a execução se o usuário não estiver logado"""
-    if not st.session_state.get("logged_in", False):
+    """Interrompe execução se usuário não estiver logado"""
+    if not st.session_state.get("logged_in"):
         st.warning("Você precisa fazer login primeiro.")
         st.stop()
