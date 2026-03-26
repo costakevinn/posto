@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSLog — Login</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #111;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 0.5px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo-img {
+      width: 90px;
+      margin-bottom: 0.5rem;
+    }
+
+    .logo-project {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 1.5px;
+      margin-top: 6px;
+    }
+
+    .divider {
+      height: 0.5px;
+      background: #2a2a2a;
+      margin: 1.5rem 0;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      font-size: 14px;
+      background: #111;
+      border: 0.5px solid #2a2a2a;
+      border-radius: 8px;
+      color: #eee;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus {
+      border-color: #6fcf3f;
+    }
+
+    .erro {
+      font-size: 12px;
+      color: #e05555;
+      margin-bottom: 1rem;
+      text-align: center;
+      padding: 8px;
+      background: #2a1a1a;
+      border-radius: 6px;
+      border: 0.5px solid #3a2a2a;
+    }
+
+    .btn {
+      width: 100%;
+      height: 38px;
+      background: #6fcf3f;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      margin-top: 0.25rem;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #82e04d;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <img class="logo-img" src="/assets/rslog.webp" alt="RSLog" />
+      <div class="logo-project">POSTO JACARAÍPE</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <form method="POST" action="/login">
+      {% if erro %}
+      <div class="erro">{{ erro }}</div>
+      {% endif %}
+
+      <div class="field">
+        <label>USUÁRIO</label>
+        <input type="text" name="usuario" placeholder="seu usuário" autocomplete="username" required />
+      </div>
+
+      <div class="field">
+        <label>SENHA</label>
+        <input type="password" name="senha" placeholder="••••••••" autocomplete="current-password" required />
+      </div>
+
+      <button class="btn" type="submit">ENTRAR</button>
+    </form>
+  </div>
+</body>
+</html>
