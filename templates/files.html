@@ -51,12 +51,12 @@
     <div style="display:flex;align-items:center;gap:1.5rem;">
       <span class="brand">RSLOG</span>
       <div class="nav-links">
-        <a href="/files" class="nav-link active">Arquivos</a>
-        <a href="/reports" class="nav-link">Relatórios</a>
-        <a href="/docs" class="nav-link">Documentação</a>
+        <a href="/files?token={{ token }}" class="nav-link active">Arquivos</a>
+        <a href="/reports?token={{ token }}" class="nav-link">Relatórios</a>
+        <a href="/docs?token={{ token }}" class="nav-link">Documentação</a>
       </div>
     </div>
-    <a href="/logout" class="logout">SAIR</a>
+    <a href="/logout?token={{ token }}" class="logout">SAIR</a>
   </div>
   <div class="content">
     <p class="page-title">Arquivos</p>
