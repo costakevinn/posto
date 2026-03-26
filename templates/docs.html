@@ -2,46 +2,19 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RSLog — Arquivos</title>
+  <title>RSLog — Documentação</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', sans-serif; background: #111; color: #eee; }
-    .navbar {
-      background: #1a1a1a;
-      border-bottom: 0.5px solid #2a2a2a;
-      padding: 0 1.5rem;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .navbar { background: #1a1a1a; border-bottom: 0.5px solid #2a2a2a; padding: 0 1.5rem; height: 52px; display: flex; align-items: center; justify-content: space-between; }
     .brand { font-size: 16px; font-weight: 600; color: #6fcf3f; letter-spacing: 2px; }
     .nav-links { display: flex; gap: 4px; }
-    .nav-link {
-      padding: 6px 14px;
-      font-size: 13px;
-      color: #888;
-      border-radius: 8px;
-      text-decoration: none;
-    }
-    .nav-link.active {
-      background: #222;
-      color: #6fcf3f;
-      border: 0.5px solid #2a2a2a;
-    }
+    .nav-link { padding: 6px 14px; font-size: 13px; color: #888; border-radius: 8px; text-decoration: none; }
+    .nav-link.active { background: #222; color: #6fcf3f; border: 0.5px solid #2a2a2a; }
     .nav-link:hover { color: #eee; }
-    .logout {
-      padding: 6px 12px;
-      font-size: 12px;
-      color: #666;
-      border: 0.5px solid #2a2a2a;
-      border-radius: 8px;
-      text-decoration: none;
-      letter-spacing: 0.5px;
-    }
+    .logout { padding: 6px 12px; font-size: 12px; color: #666; border: 0.5px solid #2a2a2a; border-radius: 8px; text-decoration: none; }
     .logout:hover { color: #e05555; border-color: #e05555; }
-    .content { padding: 2rem 1.5rem; }
+    .content { padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto; }
     .page-title { font-size: 16px; font-weight: 500; color: #eee; margin-bottom: 4px; }
     .page-sub { font-size: 12px; color: #555; }
   </style>
@@ -51,15 +24,15 @@
     <div style="display:flex;align-items:center;gap:1.5rem;">
       <span class="brand">RSLOG</span>
       <div class="nav-links">
-        <a href="/files" class="nav-link active">Arquivos</a>
-        <a href="/reports" class="nav-link">Relatórios</a>
-        <a href="/docs" class="nav-link">Documentação</a>
+        <a href="/files?token={{ token }}" class="nav-link">Arquivos</a>
+        <a href="/reports?token={{ token }}" class="nav-link">Relatórios</a>
+        <a href="/docs?token={{ token }}" class="nav-link active">Documentação</a>
       </div>
     </div>
-    <a href="/logout" class="logout">SAIR</a>
+    <a href="/logout?token={{ token }}" class="logout">SAIR</a>
   </div>
   <div class="content">
-    <p class="page-title">Arquivos</p>
+    <p class="page-title">Documentação</p>
     <p class="page-sub">Em construção</p>
   </div>
 </body>
