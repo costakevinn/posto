@@ -1,13 +1,8 @@
 import streamlit as st
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.drive import list_files  # apenas se precisar de funções adicionais
 
 if not st.session_state.get("logged_in"):
     st.warning("Você precisa fazer login primeiro.")
-    st.stop()
+    st.stop()  # interrompe execução
 
 arquivos = st.session_state.get("arquivos", [])
 
@@ -17,7 +12,9 @@ with col1:
 with col2:
     if st.button("Sair"):
         st.session_state.clear()
-        st.experimental_rerun()
+        st.experimental_rerun = None  # remove experimental_rerun
+        st.warning("Você saiu. Recarregue a página para logar novamente.")
+        st.stop()
 
 st.divider()
 
