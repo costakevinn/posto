@@ -1,30 +1,24 @@
 import streamlit as st
-from utils.auth import authenticate
+from utils.auth import authenticate  # sua função que usa st.secrets
 
 # ---------- Inicializa session_state ----------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-# ---------- FUNÇÃO DE LOGIN ----------
-def login_page():
+# ---------- LOGIN ----------
+if not st.session_state.logged_in:
     st.title("Login RSLog")
-    with st.form("login_form"):
-        username = st.text_input("Usuário")
-        password = st.text_input("Senha", type="password")
-        submitted = st.form_submit_button("Entrar")
-        if submitted:
-            if authenticate(username, password):
-                st.session_state.logged_in = True
-                st.success("Login realizado com sucesso!")
-            else:
-                st.error("Usuário ou senha incorretos.")
+    username = st.text_input("Usuário")
+    password = st.text_input("Senha", type="password")
+    if st.button("Entrar"):
+        if authenticate(username, password):
+            st.session_state.logged_in = True
+            st.success("Login realizado com sucesso!")
+        else:
+            st.error("Usuário ou senha incorretos.")
     st.stop()  # bloqueia o resto do app até logar
 
-# ---------- SE NÃO ESTIVER LOGADO, MOSTRA LOGIN ----------
-if not st.session_state.logged_in:
-    login_page()
-
-# ---------- PÁGINA PRINCIPAL: Arquivos ----------
+# ---------- PÁGINA PRINCIPAL: ARQUIVOS ----------
 st.title("Arquivos do projeto")
 
 # Mock de arquivos
@@ -58,5 +52,4 @@ else:
 # ---------- LOGOUT ----------
 if st.button("Sair"):
     st.session_state.clear()
-    # Depois de limpar, rerun para voltar pro login
     st.experimental_rerun()
