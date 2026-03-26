@@ -1,7 +1,12 @@
-# posto/pages/login.py
 import streamlit as st
-from posto.utils.auth import authenticate
-from posto.utils.drive import list_files
+import sys
+import os
+
+# Adiciona a raiz do projeto ao sys.path para encontrar utils
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from utils.auth import authenticate
+from utils.drive import list_files
 
 def load_files():
     try:
@@ -26,6 +31,7 @@ with st.form("login_form"):
         if authenticate(username, password):
             st.session_state.logged_in = True
             st.session_state.arquivos = load_files()
+            st.session_state.authenticated = True
             st.success("Login realizado com sucesso!")
         else:
             st.error("Usuário ou senha incorretos.")

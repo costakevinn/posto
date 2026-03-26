@@ -1,5 +1,9 @@
-# posto/pages/arquivos.py
 import streamlit as st
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.drive import list_files  # apenas se precisar de funções adicionais
 
 if not st.session_state.get("logged_in"):
     st.warning("Você precisa fazer login primeiro.")

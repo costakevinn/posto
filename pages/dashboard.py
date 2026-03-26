@@ -1,4 +1,3 @@
-# posto/pages/dashboard.py
 import streamlit as st
 
 if not st.session_state.get("logged_in"):
