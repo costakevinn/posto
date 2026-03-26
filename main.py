@@ -1,13 +1,9 @@
 import secrets
-import logging
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from utils.auth import autenticar, criar_sessao
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 app = FastAPI()
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
@@ -16,59 +12,57 @@ templates = Jinja2Templates(directory="templates")
 sessions = {}
 
 def sessao_valida(request: Request) -> bool:
-    token = request.cookies.get("session_token")
+    token = request.query_params.get("token") or request.cookies.get("session_token")
     return token is not None and token in sessions
+
+def get_token(request: Request) -> str | None:
+    return request.query_params.get("token") or request.cookies.get("session_token")
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     if sessao_valida(request):
-        return RedirectResponse("/files")
+        token = get_token(request)
+        return RedirectResponse(f"/files?token={token}")
     return RedirectResponse("/login")
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     if sessao_valida(request):
-        return RedirectResponse("/files")
+        token = get_token(request)
+        return RedirectResponse(f"/files?token={token}")
     return templates.TemplateResponse(request, "login.html")
 
 @app.post("/login")
 async def login(request: Request, usuario: str = Form(...), senha: str = Form(...)):
-    logger.info(f"Login attempt: usuario={usuario}")
-    auth_ok = autenticar(usuario, senha)
-    logger.info(f"Auth result: {auth_ok}")
-    if auth_ok:
+    if autenticar(usuario, senha):
         token = criar_sessao()
         sessions[token] = usuario
-        logger.info(f"Session created, redirecting to /files")
-        response = RedirectResponse("/files", status_code=303)
-        response.set_cookie("session_token", token, httponly=True, samesite="lax")
-        return response
+        return RedirectResponse(f"/files?token={token}", status_code=303)
     return templates.TemplateResponse(request, "login.html", {"erro": "Usuário ou senha inválidos"})
 
 @app.get("/logout")
 async def logout(request: Request):
-    token = request.cookies.get("session_token")
+    token = get_token(request)
     sessions.pop(token, None)
-    response = RedirectResponse("/login", status_code=303)
-    response.delete_cookie("session_token")
-    return response
+    return RedirectResponse("/login", status_code=303)
 
 @app.get("/files", response_class=HTMLResponse)
 async def files_page(request: Request):
-    logger.info(f"Files page - cookies: {request.cookies}")
     if not sessao_valida(request):
-        logger.info("Sessao invalida, redirecting to login")
         return RedirectResponse("/login")
-    return templates.TemplateResponse(request, "files.html")
+    token = get_token(request)
+    return templates.TemplateResponse(request, "files.html", {"token": token})
 
 @app.get("/reports", response_class=HTMLResponse)
 async def reports_page(request: Request):
     if not sessao_valida(request):
         return RedirectResponse("/login")
-    return templates.TemplateResponse(request, "reports.html")
+    token = get_token(request)
+    return templates.TemplateResponse(request, "reports.html", {"token": token})
 
 @app.get("/docs", response_class=HTMLResponse)
 async def docs_page(request: Request):
     if not sessao_valida(request):
         return RedirectResponse("/login")
-    return templates.TemplateResponse(request, "docs.html")
+    token = get_token(request)
+    return templates.TemplateResponse(request, "docs.html", {"token": token})
