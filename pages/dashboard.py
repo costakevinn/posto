@@ -1,7 +1,9 @@
+# posto/pages/dashboard.py
 import streamlit as st
 
-if not st.session_state.get("authenticated"):
-    st.switch_page("pages/login.py")
+if not st.session_state.get("logged_in"):
+    st.warning("Você precisa fazer login primeiro.")
+    st.stop()
 
 st.title("Dashboard")
 st.info("Em breve.")

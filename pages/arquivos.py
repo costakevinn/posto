@@ -1,7 +1,9 @@
+# posto/pages/arquivos.py
 import streamlit as st
 
-if not st.session_state.get("authenticated"):
-    st.switch_page("pages/login.py")
+if not st.session_state.get("logged_in"):
+    st.warning("Você precisa fazer login primeiro.")
+    st.stop()
 
 arquivos = st.session_state.get("arquivos", [])
 
@@ -11,7 +13,7 @@ with col1:
 with col2:
     if st.button("Sair"):
         st.session_state.clear()
-        st.switch_page("pages/login.py")
+        st.experimental_rerun()
 
 st.divider()
 
@@ -24,14 +26,14 @@ else:
         with c1:
             st.write(arq["name"])
         with c2:
-            kb = arq["size"] / 1024
-            st.caption(f"{kb/1024:.1f} MB" if kb > 1024 else f"{kb:.0f} KB")
+            size_kb = arq.get("size", 0) / 1024
+            st.caption(f"{size_kb/1024:.1f} MB" if size_kb > 1024 else f"{size_kb:.0f} KB")
         with c3:
             st.download_button(
                 "⬇ Baixar",
-                data=arq["data"],
+                data=arq.get("data", b""),
                 file_name=arq["name"],
-                mime=arq["mime_type"],
+                mime=arq.get("mimeType", "application/octet-stream"),
                 key=f"dl_{arq['name']}",
                 use_container_width=True,
             )

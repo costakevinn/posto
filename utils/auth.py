@@ -1,7 +1,11 @@
+# posto/utils/auth.py
 import hashlib
 import streamlit as st
 
 def authenticate(username: str, password: str) -> bool:
+    """
+    Verifica usuário e senha usando st.secrets com hash + salt
+    """
     salt = st.secrets["auth"]["salt"]
     password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
     return (
