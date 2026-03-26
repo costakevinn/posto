@@ -1,9 +1,13 @@
 import secrets
+import logging
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from utils.auth import autenticar, criar_sessao
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
@@ -29,17 +33,15 @@ async def login_page(request: Request):
 
 @app.post("/login")
 async def login(request: Request, usuario: str = Form(...), senha: str = Form(...)):
-    if autenticar(usuario, senha):
+    logger.info(f"Login attempt: usuario={usuario}")
+    auth_ok = autenticar(usuario, senha)
+    logger.info(f"Auth result: {auth_ok}")
+    if auth_ok:
         token = criar_sessao()
         sessions[token] = usuario
+        logger.info(f"Session created, redirecting to /files")
         response = RedirectResponse("/files", status_code=303)
-        response.set_cookie(
-            "session_token",
-            token,
-            httponly=True,
-            samesite="lax",
-            secure=True
-        )
+        response.set_cookie("session_token", token, httponly=True, samesite="lax")
         return response
     return templates.TemplateResponse(request, "login.html", {"erro": "Usuário ou senha inválidos"})
 
@@ -53,7 +55,9 @@ async def logout(request: Request):
 
 @app.get("/files", response_class=HTMLResponse)
 async def files_page(request: Request):
+    logger.info(f"Files page - cookies: {request.cookies}")
     if not sessao_valida(request):
+        logger.info("Sessao invalida, redirecting to login")
         return RedirectResponse("/login")
     return templates.TemplateResponse(request, "files.html")
 
