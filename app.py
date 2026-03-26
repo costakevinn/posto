@@ -7,18 +7,23 @@ if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
 # ---------- LOGIN ----------
-if not st.session_state.logged_in:
+def login_page():
     st.title("Login RSLog")
-    username = st.text_input("Usuário")
-    password = st.text_input("Senha", type="password")
-    if st.button("Entrar"):
-        if authenticate(username, password):
-            st.session_state.logged_in = True
-            st.success("Login realizado com sucesso!")
-            st.experimental_rerun()
-        else:
-            st.error("Usuário ou senha incorretos.")
-    st.stop()  # bloqueia o restante do app até logar
+    with st.form("login_form"):
+        username = st.text_input("Usuário")
+        password = st.text_input("Senha", type="password")
+        submitted = st.form_submit_button("Entrar")
+        if submitted:
+            if authenticate(username, password):
+                st.session_state.logged_in = True
+                st.success("Login realizado com sucesso!")
+                # Não usamos experimental_rerun aqui
+            else:
+                st.error("Usuário ou senha incorretos.")
+    st.stop()  # bloqueia o resto do app até logar
+
+if not st.session_state.logged_in:
+    login_page()
 
 # ---------- REQUER LOGIN ----------
 require_login()
