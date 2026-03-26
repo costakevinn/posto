@@ -25,7 +25,7 @@ st.title("RSLog")
 username = st.text_input("Usuário")
 password = st.text_input("Senha", type="password")
 
-if st.button("Entrar", type="primary"):
+if st.button("Entrar"):
     if authenticate(username, password):
         with st.spinner("Carregando arquivos..."):
             st.session_state.arquivos = load_files()
